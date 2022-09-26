@@ -1,0 +1,106 @@
+In Command Prompt:
+
+flask == 1.1.2
+numpy == 1.18.5
+pandas == 1.1.0
+PyMySQL == 0.10.1
+scikit-learn ==0.22
+sklearn == 0.0
+
+pip install numpy
+pip install pandas
+pip install scikit-learn==0.22
+pip install flask
+pip install PyMySQL==0.10.1
+pip install xgboost
+
+Coding: (Jupyter Notebook)
+
+#for numerical computing
+import pandas as pd
+
+#for dataframe
+import numpy as np
+
+#ignore warnings
+import warnings
+warnings.filterwarnings('ignore')
+
+#to split train and test data
+from sklearn.model_selection import train_test_split
+import sklearn.metrics as sm
+
+df= pd.read_csv('dataset_file.csv')
+
+print(df.shape)
+
+print(df.columns)
+
+print(df.head())
+
+print(df.describe())
+
+print(df.corr())
+
+df = df.drop_duplicates()
+
+print(df.shape)
+
+print(df.isnull().sum())
+
+df = df.dropna()
+
+print(df.isnull().sum())
+
+y = df.MoisturePercentage
+X = df.drop('MoisturePercentage', axis = 1)
+
+#Split X and y into train and test sets
+X_train, X_test, y_train, y_test = train_test_split (X, y, test_size = 0.2, random_state = 0)
+
+#Print number of observations in X_train, X_test, y_train and y_test
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape, '\n')
+
+from sklearn.ensemble import RandomForestRegressor
+model_1 = RandomForestRegressor(n_estimators = 500)
+
+from sklearn.linear_model import LinearRegression
+model_2 = LinearRegression()
+
+from sklearn.tree import DecisionTreeRegressor
+model_3 = DecisionTreeRegressor()
+
+#training
+
+model_1.fit(X_train, y_train)
+model_2.fit(X_train, y_train)
+model_3.fit(X_train, y_train)
+
+#predict test set results
+
+y_pred_1 = model_1.predict(X_test)
+y_pred_2 = model_2.predict(X_test)
+y_pred_3 = model_3.predict(X_test)
+
+accuracy_1 = sm.r2_score(y_test, y_pred_1)
+print('Accuracy of RandomForestRegressor is {:.2f}% ' .format(accuracy_1*(-100)))
+
+accuracy_2 = sm.r2_score(y_test, y_pred_2)
+print('Accuracy of LinearRegression is {:.2f}% ' .format(accuracy_2*(-100)))
+
+accuracy_3 = sm.r2_score(y_test, y_pred_3)
+print('Accuracy of Decision Tree is {:.2f}% ' .format(accuracy_3*(-100)))
+
+#from Sklearn.externals import joblib
+import joblib
+
+#save the model as a pickle in a file
+joblib.dump(model_3, 'filename.pk3')
+
+#Load the model from the file
+final_model = joblib.load('filename.pk3')
+
+y_pred = final_model.predict(X_test)
+
+accuracy = sm.r2_score(y_test, y_pred)
+print('Accuracy of Final Model is {:2f}% ' .format(accuracy_3*(-100)))
