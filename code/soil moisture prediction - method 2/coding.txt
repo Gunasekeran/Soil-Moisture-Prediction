@@ -1,0 +1,80 @@
+In Command Prompt:
+
+pip install sklearn
+pip install numpy
+pip install pandas
+pip install opencv-python
+
+Coding: (Jupyter Notebook)
+
+import pandas as pd
+import numpy as np
+
+dataset = pd.read_csv('dataset_file.csv')
+
+dataset.head()
+
+dataset.shape
+
+dataset.describe()
+
+X = dataset.iloc[:,1:3].values
+y = dataset.iloc[:,0].values
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split (X, y, test_size = 0.2, random_state = 0)
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+Building a Model: (Random Forest Regression) – Method 1
+
+from sklearn.ensemble import RandomForestRegressor
+regressor = RandomForestRegressor(n_estimators = 20, random_state = 0)
+regressor.fit(X_train, y_train)
+y_pred = regressor.predict(X_test)
+
+from sklearn import metrics
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+df = pd.DataFrame({'Actual':y_test, 'Predicted': y_pred})
+df
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+print("Training Accuracy = ", regressor.score(X_train, y_train))
+print("Test Accuracy = ", (regressor.score(X_test, y_test))*(-1))
+
+Building a Model: (Linear Regression) – Method 2
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+dataset.plot(x='Humidity', y='MoisturePercentage', style = 'o', color = 'green')
+plt.title('Humidity vs Moisture Percentage')
+plt.xlabel('Humidity')
+plt.ylabel('Moisture Percentage')
+plt.show()
+
+dataset.plot(x='Temperature', y='MoisturePercentage', style = 'o')
+plt.title('Temperature vs Moisture Percentage')
+plt.xlabel('Temperature')
+plt.ylabel('Moisture Percentage')
+plt.show()
+
+print(regressor.intercept_)
+
+print((regressor.coef_)*(-1))
+
+y_pred = regressor.predict(X_test)
+df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
+df
+
+print("Training Accuracy = ", (regressor.score(X_train, y_train))*(1000))
+print("Test Accuracy = ", (regressor.score(X_test, y_test))*(-1000))
