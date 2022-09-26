@@ -5,6 +5,7 @@ Goal:
 The objective is to accurately predict the soil moisture level multiple days in advance. This solution will help farmers prepare their irrigation schedules more efficiently.
 
 Dataset Description:
+
 We are provided with data from four fields on which to train your model. We need to predict, in 5-minute increments, the last four days for soil humidities in fields 1 and 3 and need to predict, in 5-minute increments, the last six days for soil humidities in fields 2 and 4.
 
 The fields were irrigated and growing crops as follows:
